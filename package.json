@@ -1,0 +1,35 @@
+{
+  "name": "crazy-eights",
+  "version": "1.0.0",
+  "description": "A simple interval timer",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshualondon/crazy-eights.git"
+  },
+  "keywords": [
+    "timer",
+    "interval"
+  ],
+  "author": "Josh London",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshualondon/crazy-eights/issues"
+  },
+  "homepage": "https://github.com/joshualondon/crazy-eights#readme",
+  "devDependencies": {
+    "autoprefixer": "^6.4.0",
+    "browser-sync": "^2.14.0",
+    "gulp": "^3.9.1",
+    "gulp-gh-pages": "^0.5.4",
+    "gulp-inline-source": "^2.1.0",
+    "gulp-postcss": "^6.1.1",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-util": "^3.0.7",
+    "postcss-import": "^8.1.2"
+  }
+}

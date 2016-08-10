@@ -7,13 +7,16 @@ body {
     padding: 0;
 }
 
-.primary-header h1 {
-    background: #fff;
-    color: #999;
-    font-size: 1rem;
-    text-align: center;
-    margin: 0;
-    padding: 1.5em 0;
+.primary-header {
+
+    h1 {
+        background: #fff;
+        color: #999;
+        font-size: 1rem;
+        text-align: center;
+        margin: 0;
+        padding: 1.5em 0;
+    }
 }
 
 .timer-wrapper {
@@ -57,25 +60,25 @@ body {
     text-align: center;
     text-transform: uppercase;
     vertical-align: middle;
+
+    &:focus {
+        border-color: blue;
+    }
 }
 
-.timer-start:focus {
-    border-color: blue;
-}
+.timer-options {
 
-.timer-options label {
-    display: inline-block;
-    margin-right: 1em;
-}
+    label {
+        display: inline-block;
+        margin-right: 1em;
+    }
 
-.timer-options label span {
-}
-
-.timer-options label input {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #999;
-    padding: .25em;
-    text-align: center;
-    width: 3em;
+    input {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #999;
+        padding: .25em;
+        text-align: center;
+        width: 3em;
+    }
 }
