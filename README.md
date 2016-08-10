@@ -1,7 +1,13 @@
-Tabata Timer
-============
+# Crazy Eights Timer
+The crazy eights activity is crazy similar to the Tabata training program -- timer functionally that is.
 
-Simple tabata timer that you can use from your browser.
+## Todo
+- Gulp
+- Sass
+- src/dist
+- gh-pages
+- inline Critical CSS
+- New audio
 
-Please check out the demo <a href="http://natemago.github.io/tabata-timer">here</a>.
 
+Forked from: <a href="https://github.com/natemago">@natemago</a>'s <a href="https://github.com/natemago/tabata-timer">Tabata Timer</a>.

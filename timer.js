@@ -59,11 +59,11 @@
       };
       tick();
    };
-   
+
    var clearSchedule = function(){
       __scheduleTable = {};
    };
-   
+
    var convertMillis = function(ms){
       return {
          minutes: Math.floor(ms/60000),
@@ -71,11 +71,11 @@
          millis: ms%1000
       };
    };
-   
+
    var pad = function (n){
       return n > 9 ? n+'':'0'+n;
    };
-   
+
    var TBTimer = function(config){
       var self = this;
       this.resolution = config.resolution || 10;
@@ -85,11 +85,11 @@
          rest: config.specs.rest || 10,
          work: config.specs.work || 20
       };
-      
+
       var current = {};
-      
+
       this.displayEl = $('.timer-display')[0];
-      
+
       config.sounds = config.sounds || {};
       var sounds = {};
       var toLoad = 0;
@@ -102,7 +102,7 @@
           for(var sndName in config.sounds){
              if(config.sounds.hasOwnProperty(sndName)){
                 var sound = new Audio(config.sounds[sndName]);
-                
+
                 sound.addEventListener('error', function failed(e) {
                 // audio playback failed - show a message saying why
                 // to get the source of the audio element use $(this).src
@@ -124,7 +124,7 @@
                    break;
                 }
                 }, true);
-                
+
                 toLoad++;
                 sound.addEventListener("canplay", function(){
                    toLoad--;
@@ -136,19 +136,19 @@
                 sounds[sndName] = sound;
                 sound.load();
                 console.log('Load sound: ', sndName, ' - ', toLoad);
-                
+
                 sound.addEventListener('playing', function(){
                     console.log('Sound', sndName, 'is playing');
                 }, true);
-                
+
              }
           }
       };
-      
+
       $(document).click(function(){
           self.loadSounds();
       });
-      
+
       this.sounds = {
          soundsAvailable: false,
          tracks: sounds,
@@ -164,22 +164,22 @@
             }
          }
       };
-      
-      
+
+
       this.soundsLoaded = function(){
          console.log('Sounds available');
          this.sounds.soundsAvailable = true;
       };
-      
+
       this.getValues = function(){
          var rounds = $('.input-rounds').val();
          var rest = $('.input-rest').val();
          var work = $('.input-work').val();
-         
+
          $('.input-rounds').removeClass('state-error-mark');
          $('.input-rest').removeClass('state-error-mark');
          $('.input-work').removeClass('state-error-mark');
-         
+
          var correct = true;
          try{
             rounds = parseInt(rounds);
@@ -191,36 +191,36 @@
             $('.input-rounds').addClass('state-error-mark');
             correct =  false;
          }
-         
+
          try{
             rest = parseFloat(rest);
          }catch(e){
             $('.input-rest').addClass('state-error-mark');
             correct =  false;
          }
-         
+
          if( isNaN(rest) || rest <= 0){
             $('.input-rest').addClass('state-error-mark');
             correct =  false;
-         }  
-         
+         }
+
          try{
             work = parseFloat(work);
          }catch(e){
             $('.input-work').addClass('state-error-mark');
             correct =  false;
          }
-         
+
          if( isNaN(work) || work<= 0){
             $('.input-work').addClass('state-error-mark');
             correct =  false;
-         }  
-         
+         }
+
          if(!correct){
             this.notify('Incorrect!');
             return false;
          }
-         
+
          this.specs = {
             rounds: rounds,
             rest: rest,
@@ -228,12 +228,12 @@
          };
          return this.specs;
       };
-      
+
       this.start = function(){
          if(this.running){
              return;
          }
-         this.loadSounds(); // if we haven't already 
+         this.loadSounds(); // if we haven't already
          clearSchedule();
          var s = this.getValues();
          if(s){
@@ -246,7 +246,7 @@
                   type: 'rest'
                });
                schedules.push(s.rest*1000);
-               
+
                rs.push({
                   total: s.work * 1000,
                   round: i+1,
@@ -261,14 +261,14 @@
             schedule(function(delay, rn){
                this._doRound(rn);
             }, schedules, this);
-            
-            $('.timer-start').val('Stop');
+
+            $('.timer-start').text('Stop');
             return {s:schedules, r:rs};
          }
       };
       this.stop  = function(){
          this.running = false;
-         $('.timer-start').val('Start');
+         $('.timer-start').text('Start');
          this.notifyForRound('-', 'rest');
          if(current.timerId){
             clearInterval(current.timerId);
@@ -277,7 +277,7 @@
          }
          this.rounds = [];
          this.updateDisplay(0);
-         
+
       };
       this.notify = function(message){
          $('.global-notification').html(message);
@@ -287,12 +287,12 @@
       };
       this.updateDisplay = function(ms){
          var tm = convertMillis(ms);
-         this.displayEl.innerHTML = 
-            pad(tm.minutes) + ':' + 
+         this.displayEl.innerHTML =
+            pad(tm.minutes) + ':' +
             pad(tm.seconds) + ':' +
             pad(Math.floor(tm.millis/10));
       };
-      
+
       this._doRound = function(rn){
          if(!this.running){
             return;
@@ -315,8 +315,8 @@
                var dtm = self.rounds[rn].total - elapsedTime;
                if(dtm > 0){
                   self.updateDisplay(dtm);
-                  if(dtm <= 5000 && 
-                        self.rounds[rn].total >= 5000 && 
+                  if(dtm <= 5000 &&
+                        self.rounds[rn].total >= 5000 &&
                            !current.alreadyWarned){
                      self.sounds.play('warning');
                      current.alreadyWarned = true;
@@ -336,12 +336,12 @@
             var roundNumber = Math.floor(rn/2) + 1;
             this.notifyForRound(roundNumber, current.round.type);
             if(current.round.type == 'rest'){
-               this.notify('Rest!');
+               this.notify('Break!');
                if(rn != 0){
                   this.sounds.play('end-round');
                }
             }else{
-               this.notify('Work!');
+               this.notify('Sketch!');
                this.sounds.play('start');
             }
          }else{
@@ -350,10 +350,10 @@
             this.stop();
          }
       };
-      
+
       this.notifyForRound = function(rn, type){
          $('.round-number').html(rn);
-         $('.round-type').html(type=='rest' ? 'REST':'WORK');
+         $('.round-type').html(type=='rest' ? 'Ready':'Sketch');
       };
       var self = this;
       $('.timer-start').click(function(){
@@ -364,7 +364,7 @@
             self.notify('Stopped!');
          }
       });
-      
+
       $(document).keypress(function(e){
          switch(e.which){
             case 32: // space
@@ -387,12 +387,12 @@
                break;
          }
       });
-      
-      
+
+
    };
-   
-   
-   
+
+
+
    $(document).ready(function(){
       tm = new TBTimer({
          sounds: {
@@ -402,14 +402,7 @@
             'warning':'audio/warning.wav'
          }
       });
-      $('.credits-popup-show').click(function(){
-         $('.credits-popup').show();
-      });
-      
-      $('.credits-popup-close').click(function(){
-         $('.credits-popup').hide();
-      });
-      
+
    });
-   
+
 })(jQuery);

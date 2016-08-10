@@ -1,231 +1,81 @@
-/*
-storm | #373034 | avilluk 5470 ||
-stormy | #5F656B | avilluk 4408 ||
-radi8ed light | #F1E8F6 | avilluk 9695 ||
-ac chrome white | #E8F1DA | avilluk 860 ||
-down | #8B8988 | avilluk 1141 ||
-http://www.colourlovers.com/palette/1196612/storm_at_lit_tower
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,200,400italic,700);
 
-*/
-
-.timer-wrapper{
-   background: rgba(95,101,107,0.7);
-   border-radius: 5px;
-   box-shadow: 0px 0px 20px #373034;
-   padding: 10px;
+body {
+    background: #efeff4;
+    font: 200 1em/1 'Source Sans Pro', Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-.timer-footer{
-   color: #E8F1DA;
-   font-size: 0.8em;
-   text-align: right;
-   text-shadow: 1px 1px 2px #373034;
+.primary-header h1 {
+    background: #fff;
+    color: #999;
+    font-size: 1rem;
+    text-align: center;
+    margin: 0;
+    padding: 1.5em 0;
 }
 
-.timer-control-set{
-   background: rgba(95,101,107,0.9);
-   border-radius: 5px;
-   box-shadow: 0px 0px 20px #373034;
-   padding: 10px;
-   margin: 10px;
+.timer-wrapper {
+    padding: 25% 0;
+    text-align: center;
 }
 
-
-.timer-controls{
-/*   float: right;*/
-   margin-left: 610px;
+.timer-display {
+    color: #494949;
+    font-size: 8em;
+    padding: 2rem 0;
 }
 
-.timer-display{
-   border-radius: 5px;
-   background: #373034;
-   padding: 15px;
-   color: #E8F1DA;
-   font-size: 8em;
-   border: solid 1px #5F656B;
-   box-shadow: 0px 0px 10px #373034;  
+.round-type {
+    background: #323232;
+    border-radius: .25em;
+    color: white;
+    display: inline-block;
+    padding: .25em 1em;
 }
 
-.timer-notification-area{
-   float: left;
+.round-number {
+    font-weight: 700;
 }
 
-.timer-info{
-   border-radius: 5px;
-   padding: 10px;
-   font-size: 3.7em;
-   color: #373034;
-   font-weight: bold;
-   background: rgba(139, 137, 136, 0.5);
-   margin: 15px;
-   text-align: center;
+.timer-actions-wrapper {
+    text-align: center;
 }
 
-
-
-.timer-control-label{
-   font-weight: bold;
-   font-size: 1.7em;
-   color: #F1E8F6;
-   width: 150px;
-   display: inline-block;
-   text-shadow: 1px 1px 3px #373034;
-   float: left;
+.timer-start {
+    background: white;
+    border: 1px solid #e7e7e7;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-block;
+    font: 200 1em/1 'Source Sans Pro', Helvetica, sans-serif;
+    width: 6em;
+    height: 6em;
+    margin: 0 auto;
+    outline: none;
+    text-align: center;
+    text-transform: uppercase;
+    vertical-align: middle;
 }
 
-.timer-control-input{
-   border: none;/* solid 2px #E8F1DA;*/
-   width: 80px;
-   color: #E8F1DA;
-   padding: 2px;
-   border-radius: 5px;
-   font-size: 1.7em;
-   background: #373034;
+.timer-start:focus {
+    border-color: blue;
 }
 
-
-.timer-action{
-   background: #8B8988;
-   border: solid 1px #373034;
-   font-weight: bold;
-   color: #373034;
-   border-radius: 5px;
-   font-size: 2.7em;
-   box-shadow: 0px 0px 10px #373034;
-   text-shadow: 1px 1px 2px #5F656B;
-   width: 100%;
-   padding: 10px;
+.timer-options label {
+    display: inline-block;
+    margin-right: 1em;
 }
 
-.timer-action:hover{
-   background: #373034;
-   border: solid 1px #373034;
-   color: #E8F1DA;
-   box-shadow: 0px 0px 10px #E8F1DA;
-   text-shadow: 1px 1px 2px #5F656B;
+.timer-options label span {
 }
 
-.timer-float-info{
-   float: left;
-   padding: 10px;
-   border-radius: 5px;
-   background: rgba(95,101,107,0.7);
-   margin-left: 70px;
-   margin-top: 30px;
-   border: solid 1px #373034;
-   box-shadow: 0px 0px 10px #373034;
-}
-
-.timer-disclaimer{
-   position: fixed;
-   bottom: 0px;
-   right: 0px;
-   background: rgba(95,101,107,0.7);
-   border-radius: 5px;
-   box-shadow: 0px 0px 20px #373034;
-   padding: 10px;
-   font-size: 0.7em;
-   color: #E8F1DA;
-}
-.timer-disclaimer a{
-   color: #E8F1DA;
-   font-weight: bold;
-   text-decoration: underline;
-}
-
-.credits-popup{
-   width: 50%;
-   position: absolute;
-   top: 30%;
-   left: 25%;
-   color: #E8F1DA;
-   font-size: 0.8em;
-   background: rgba(95,101,107,0.9);
-   border-radius: 5px;
-   box-shadow: 0px 0px 20px #373034;
-   padding: 10px;
-   /*border: 1px solid #E8F1DA;*/
-   text-shadow: 0px 0px 20px #373034;
-}
-
-.credits-popup h3 {
-   text-align: center;
-   color: #F1E8F6;
-}
-
-.credits-popup .timer-action{
-   width: auto;
-   text-align: center;
-   font-size: 1em;
-}
-
-.credits-popup a {
-   color: #E8F1DA;
-   font-weight: bold;
-   text-decoration: underline;
-}
-
-.overlay-container{
-   width: 100%;
-   height: 100%;
-   position: absolute;
-   top: 0px;
-   left: 0px;
-   text-align: center;
-}
-.overlay-container .timer-info{
-   color: #E8F1DA;
-   padding-top: 50px;
-   padding-bottom: 50px;
-   font-size: 7em;
-   text-shadow: 0px 0px 4px #373034;
-}
-
-.info-text-title{
-   font-size: 0.5em;
-}
-
-.info-text{
-   font-size: 1.7em;
-}
-
-.state-error-mark{
-   border: solid 1px #111;
-   box-shadow: 0px 0px 4px #800;
-}
-
-.timer-display-like{
-   background: #373034;
-   color: #E8F1DA;
-}
-
-.info-text-smaller{
-   font-size: 0.7em;
-}
-
-.timer-explanation{
-   font-size: 0.8em;
-   margin: 5px;
-}
-.timer-explanation-entry{
-   padding: 0.5px;
-}
-
-.keyboard-button{
-   border-radius: 3px;
-   border: solid 1px #E8F1DA;
-   padding: 2px;
-   display: inline-block;
-}
-
-.console{
-    background: #000;
-    color: #E8F1DA;
-    font-family: monospace;
-    font-size: 12px;
-}
-
-body{
-   font-family: sans-serif;
-   background: url('images/pattern-3.png');
+.timer-options label input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #999;
+    padding: .25em;
+    text-align: center;
+    width: 3em;
 }
