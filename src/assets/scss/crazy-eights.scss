@@ -1,5 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,200,400italic,700);
 
+@import '_circle.scss';
+@import '_timer.scss';
+@import '_action-notification.scss';
+
 body {
     background: #efeff4;
     font: 200 1em/1 'Source Sans Pro', Helvetica, sans-serif;
@@ -19,30 +23,13 @@ body {
     }
 }
 
-.timer-wrapper {
-    padding: 25% 0;
-    text-align: center;
-}
 
-.timer-display {
-    color: #494949;
-    font-size: 8em;
-    padding: 2rem 0;
-}
-
-.round-type {
-    background: #323232;
-    border-radius: .25em;
-    color: white;
-    display: inline-block;
-    padding: .25em 1em;
-}
-
-.round-number {
-    font-weight: 700;
-}
 
 .timer-actions-wrapper {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
 }
 

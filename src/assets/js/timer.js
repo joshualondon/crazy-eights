@@ -1,94 +1,105 @@
-/*
-   Tabata Timer - simple tabata timer
-   Copyright (C) 2014 Pavle Jonoski
+(function($) {
 
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software Foundation,
-   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
-*/
-
-(function($){
+    // --------
+    // DEBUG
+    // --------
     var DEBUG = false;
-    if(DEBUG){
+    if (DEBUG) {
         var console = {
             log: function(){
-                var message = '';
-                for(var i = 0; i < arguments.length; i++){
-                    message += arguments[i] + ' ';
-                }
-                $('.console').html(
-                    $('.console').html() + message + '\n');
+            var message = '';
+            for (var i = 0; i < arguments.length; i++) {
+                message += arguments[i] + ' ';
+            }
+            $('.console').html(
+                $('.console').html() + message + '\n');
             }
         };
-    }else{
+    } else {
         var console = window.console || {log:function(){}};
     }
 
-   var __scheduleTable = {};
-   var __scheduleId = 0;
-   var schedule = function(callback, table, scope, error){
-      var i = 0;
-      var id = __scheduleId++;
-      __scheduleTable[id] = true;
-      var tick = function(){
-         if(!__scheduleTable[id]){
-            return;
-         }
-         if(i < table.length){
-            try{
-               callback.call(scope || window, table[i], i);
-               setTimeout(tick, table[i]);
-               i++;
-            }catch(e){
-               error = error || function(){};
-               if(error){
-                  error(e, table[i], i);
-               }
+
+
+    // --------
+    // Schedule Tables
+    // --------
+    var __scheduleTable = {};
+    var __scheduleId = 0;
+    var schedule = function(callback, table, scope, error) {
+        var i = 0;
+        var id = __scheduleId++;
+        __scheduleTable[id] = true;
+
+        var tick = function() {
+
+            if (!__scheduleTable[id]) {
+                return;
             }
-         }
-      };
-      tick();
-   };
 
-   var clearSchedule = function(){
-      __scheduleTable = {};
-   };
+            if (i < table.length) {
+                try {
+                    callback.call(scope || window, table[i], i);
+                    setTimeout(tick, table[i]);
+                    i++;
+                } catch(e) {
+                    error = error || function(){};
+                    if (error) {
+                        error(e, table[i], i);
+                    }
+                }
+            }
+        };
+        tick();
+    };
 
-   var convertMillis = function(ms){
-      return {
-         minutes: Math.floor(ms/60000),
-         seconds: Math.floor(ms/1000)%60,
-         millis: ms%1000
-      };
-   };
+    var clearSchedule = function() {
+        __scheduleTable = {};
+    };
 
-   var pad = function (n){
-      return n > 9 ? n+'':'0'+n;
-   };
 
-   var TBTimer = function(config){
-      var self = this;
-      this.resolution = config.resolution || 10;
-      config.specs = config.specs || {};
-      this.specs = {
-         rounds: config.specs.rounds || 8,
-         rest: config.specs.rest || 10,
-         work: config.specs.work || 20
-      };
 
-      var current = {};
+    // --------
+    // Covert milliseconds
+    // --------
+    var convertMillis = function(ms) {
+        return {
+            minutes: Math.floor(ms/60000),
+            seconds: Math.floor(ms/1000)%60,
+            millis: ms%1000
+        };
+    };
 
-      this.displayEl = $('.timer-display')[0];
+
+
+
+    // --------
+    // Pad the seconds
+    // --------
+    var pad = function (n) {
+        return n > 9 ? n+'':'0'+n;
+    };
+
+
+
+
+
+    // --------
+    // Set the default timer vals
+    // --------
+    var TBTimer = function(config) {
+        var self = this;
+        this.resolution = config.resolution || 10;
+        config.specs = config.specs || {};
+        this.specs = {
+            rounds: config.specs.rounds || 8,
+            rest: config.specs.rest || 10,
+            work: config.specs.work || 40
+    };
+
+    var current = {};
+
+    this.displayEl = $('.timer-display')[0];
 
       config.sounds = config.sounds || {};
       var sounds = {};
@@ -229,23 +240,74 @@
          return this.specs;
       };
 
-      this.start = function(){
-         if(this.running){
+      this.start = function() {
+
+         if (this.running) {
              return;
          }
+
          this.loadSounds(); // if we haven't already
+
          clearSchedule();
+
+//-------------------
+         function animateCircle() {
+             var time = $('.input-work').val();
+             var initialOffset = '440';
+             var i = 1
+
+             /* Need initial run as interval hasn't yet occured... */
+             $('.circle-animation').css('stroke-dashoffset', initialOffset-(1*(initialOffset/time)));
+
+             var interval = setInterval(function() {
+             		if (i == time) {
+                   clearInterval(interval);
+             			return;
+                 }
+                 $('.circle-animation').css('stroke-dashoffset', initialOffset-((i+1)*(initialOffset/time)));
+                 i++;
+             }, 1000);
+         }
+
+animateCircle();
+
+
+function animateBreakCircle() {
+    var time = $('.input-rest').val();
+    var initialOffset = '440';
+    var i = 1;
+
+    /* Need initial run as interval hasn't yet occured... */
+    $('#break_circle').css('stroke-dashoffset', initialOffset-(1*(initialOffset/time)));
+
+    var interval = setInterval(function() {
+           if (i == time) {
+          clearInterval(interval);
+               return;
+        }
+        $('#break_circle').css('stroke-dashoffset', initialOffset-((i+1)*(initialOffset/time)));
+        i++;
+    }, 1000);
+}
+
+animateBreakCircle();
+
+
+// -----------------------
+
          var s = this.getValues();
-         if(s){
+         if (s) {
             var rs = [];
             var schedules = [];
-            for(var i = 0; i < s.rounds; i++){
+
+            for (var i = 0; i < s.rounds; i++){
                rs.push({
                   total: s.rest * 1000,
                   round: i+1,
                   type: 'rest'
                });
                schedules.push(s.rest*1000);
+
 
                rs.push({
                   total: s.work * 1000,
@@ -257,6 +319,8 @@
             schedules.push(500);
             this.rounds = rs;
             console.log('start');
+
+
             this.running = true;
             schedule(function(delay, rn){
                this._doRound(rn);
@@ -266,32 +330,69 @@
             return {s:schedules, r:rs};
          }
       };
-      this.stop  = function(){
+
+      this.stop = function() {
          this.running = false;
          $('.timer-start').text('Start');
+
          this.notifyForRound('-', 'rest');
-         if(current.timerId){
+
+         if (current.timerId) {
             clearInterval(current.timerId);
             current.alreadyWarned = false;
             current.round.end = new Date().getTime();
          }
+
          this.rounds = [];
          this.updateDisplay(0);
 
       };
-      this.notify = function(message){
-         $('.global-notification').html(message);
-         $('.overlay-container').fadeIn('slow', function(){
-            $('.overlay-container').delay(1000).fadeOut('slow');
-         });
-      };
-      this.updateDisplay = function(ms){
-         var tm = convertMillis(ms);
-         this.displayEl.innerHTML =
-            pad(tm.minutes) + ':' +
-            pad(tm.seconds) + ':' +
-            pad(Math.floor(tm.millis/10));
-      };
+
+
+
+      // --------
+      // Throw the action notifications
+      // --------
+    this.notify = function(message) {
+
+        $('.global-notification').text(message);
+
+        $('.global-notification').addClass('is-visible').delay(1000).queue(function(next) {
+            $(this).removeClass('is-visible');
+            next();
+        });
+
+        $('body').addClass('action-overlay-visible').delay(1000).queue(function(next) {
+            $(this).removeClass('action-overlay-visible');
+            next();
+        });
+
+        // $('.action-overlay').fadeIn('slow', function(){
+        //     $('.action-overlay').delay(1000).fadeOut('slow');
+        // });
+    };
+
+
+
+
+
+
+
+    // --------
+    // Display the counter
+    // --------
+    this.updateDisplay = function(ms) {
+    var tm = convertMillis(ms);
+        this.displayEl.innerHTML =
+        '<span class="minutes">' + pad(tm.minutes) + '</span>' +
+        '<span class="colon">:</span>' +
+        '<span class="seconds">' + pad(tm.seconds) + '</span>'
+    };
+
+
+
+
+
 
       this._doRound = function(rn){
          if(!this.running){
@@ -402,6 +503,19 @@
             'warning':'audio/warning.wav'
          }
       });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
    });
 

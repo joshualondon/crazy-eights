@@ -7,7 +7,7 @@ var gulp = require("gulp"),
 	cssnano = require('gulp-cssnano'),
 	rename = require('gulp-rename'),
     autoprefixer = require('autoprefixer'),
-	jshint = require('gulp-jshint'),
+	//jshint = require('gulp-jshint'),
 	uglify = require('gulp-uglify'),
 	concat = require('gulp-concat'),
 	del = require('del'),
@@ -18,7 +18,7 @@ var gulp = require("gulp"),
 
 // build, prefix and reload css
 gulp.task('css', function() {
-	return gulp.src(['src/assets/scss/timer.scss'])
+	return gulp.src(['src/assets/scss/crazy-eights.scss'])
 	.pipe(sass().on('error', sass.logError))
 	.pipe(postcss([
 		autoprefixer({
@@ -45,10 +45,10 @@ gulp.task('inlinecss', function() {
 
 // JS
 gulp.task('js', function() {
-	return gulp.src('src/assets/js/!(facebook.js)*.js')
+	return gulp.src('src/assets/js/*.js')
 	//.pipe(jshint('.jshintrc'))
 	//.pipe(jshint.reporter('default'))
-	.pipe(concat('timer.js'))
+	.pipe(concat('crazy-eights.js'))
 	.pipe(rename({ suffix: '.min' }))
     .pipe(uglify())
 	.pipe(gulp.dest('dist/assets/js'))
@@ -100,7 +100,7 @@ gulp.task('serve', function() {
 		}
 	});
 
-	gulp.watch(['src/*.html', 'src/assets/js/*.js', 'src/assets/scss/critical-css.scss']).on('change', reload);
+	gulp.watch(['src/*.html', 'src/assets/js/*.js', 'src/assets/scss/crazy-eights.scss']).on('change', reload);
 });
 
 

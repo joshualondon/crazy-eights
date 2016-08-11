@@ -1,0 +1,9 @@
+svg {
+    transform: rotate(-90deg);
+}
+
+.circle-animation {
+    stroke-dasharray: 440; /* this value is the pixel circumference of the circle */
+    stroke-dashoffset: 440;
+    transition: all 1s linear;
+}
