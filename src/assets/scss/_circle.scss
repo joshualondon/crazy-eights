@@ -1,5 +1,17 @@
-svg {
-    transform: rotate(-90deg);
+.timer-circle {
+	position: absolute;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%, -50%) scale(3) rotate(-90deg);
+
+	circle {
+
+		&.base-circle {
+			stroke: white;
+		}
+
+	}
+
 }
 
 .circle-animation {

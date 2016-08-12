@@ -1,6 +1,6 @@
 body {
     &:before {
-        background: rgba(255,255,255,.9);
+        background: rgba(255,255,255,.95);
         content: '';
         display: block;
         position: fixed;
@@ -21,6 +21,7 @@ body {
 }
 
 .global-notification {
+	color: lighten(black, 30%);
     font-size: 8em;
     font-weight: 500;
     position: absolute;

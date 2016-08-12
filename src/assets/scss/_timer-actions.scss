@@ -1,0 +1,33 @@
+.timer-actions-wrapper {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.timer-start {
+    background: white;
+    border: 1px solid #e7e7e7;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-block;
+    font: 200 1em/1 'Source Sans Pro', Helvetica, sans-serif;
+    width: 6em;
+    height: 6em;
+    margin: 0 auto;
+    outline: none;
+    text-align: center;
+    text-transform: uppercase;
+	transition: .35s;
+    vertical-align: middle;
+
+	&:hover {
+		background: $color-primary;
+		color: white;
+	}
+
+    &:focus {
+        border-color: $color-primary;
+    }
+}
