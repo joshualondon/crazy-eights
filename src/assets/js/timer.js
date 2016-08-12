@@ -337,11 +337,12 @@
 
 	};
 
-	// this.resetCircles = function() {
-	// 	$('.circle-animation').css('stroke-dashoffset', '440px');
-	// }
-	//
-	// this.resetCircles();
+	this.resetCircles = function() {
+
+		$('.circle-animation').css('stroke-dashoffset', '440px');
+	}
+
+
 
 
 
@@ -349,6 +350,7 @@
 	// Animate the circles
 	// --------
 	function sketchCircle() {
+
 		var time = $('.input-work').val();
 		var initialOffset = '440';
 		var i = 1
@@ -359,6 +361,7 @@
 		var interval = setInterval(function() {
 			if (i == time) {
 			  clearInterval(interval);
+			  $('#sketch_circle').css('stroke-dashoffset', initialOffset);
 				  return;
 			}
 			$('#sketch_circle').css('stroke-dashoffset', initialOffset-((i+1)*(initialOffset/time)));
@@ -369,6 +372,7 @@
 
 
 	function breakCircle() {
+
 		var time = $('.input-rest').val();
 		var initialOffset = '440';
 		var i = 1;
@@ -377,13 +381,18 @@
 		$('#break_circle').css('stroke-dashoffset', initialOffset-(1*(initialOffset/time)));
 
 		var interval = setInterval(function() {
-			   if (i == time) {
-			  clearInterval(interval);
-				   return;
+
+			if (i == time) {
+				clearInterval(interval);
+				$('#break_circle').css('stroke-dashoffset', initialOffset);
+				return;
 			}
+
 			$('#break_circle').css('stroke-dashoffset', initialOffset-((i+1)*(initialOffset/time)));
 			i++;
+
 		}, 1000);
+
 	}
 
 
@@ -407,91 +416,90 @@
 			return;
 		}
 
+		// stop current if running ....
+		if (current.timerId) {
+			clearInterval(current.timerId);
+			current.alreadyWarned = false;
+			current.round.end = new Date().getTime();
+		}
+
+		this.updateDisplay(0);
+		var self = this;
+
+		if (this.rounds[rn]) {
+			var __tick = function() {
+
+				if (!self.running) {
+					return;
+				}
+
+				var currentTime = new Date().getTime();
+				var elapsedTime = currentTime - self.rounds[rn].start;
+				var dtm = self.rounds[rn].total - elapsedTime;
+
+				if (dtm > 0) {
+					self.updateDisplay(dtm);
+
+					if (dtm <= 5000 && self.rounds[rn].total >= 5000 && !current.alreadyWarned) {
+						self.sounds.play('warning');
+						current.alreadyWarned = true;
+					}
+				} else {
+					self.updateDisplay(0);
+					if (current.timerId) {
+						clearInterval(current.timerId);
+						current.alreadyWarned = false;
+						current.round.end = new Date().getTime();
+					}
+				}
+			}
+
+			current.round = this.rounds[rn];
+			current.round.start = new Date().getTime();
+			current.timerId = setInterval(__tick, this.resolution);
+			var roundNumber = Math.floor(rn/2) + 1;
+			this.notifyForRound(roundNumber, current.round.type);
+
+			if (current.round.type == 'rest') {
+				this.notify('Break!');
+				// need to reset break circle
+				breakCircle();
+
+				if (rn != 0) {
+					this.sounds.play('end-round');
+				}
+
+			} else {
+				this.notify('Sketch!');
+				this.sounds.play('start');
+				sketchCircle();
+			}
+		} else {
+			this.notify('Bravo!');
+			this.sounds.play('end');
+			this.stop();
+		}
+	};
 
 
-		 //-------------------
 
+	// --------
+	// Update round number
+	// --------
+	this.notifyForRound = function(rn, type) {
+		$('.round-number').html(rn);
+		$('.round-type').html(type=='rest' ? 'Break':'Sketch');
+	};
 
-
-
-
-
-
-
-
-
-
-
-         // stop current if running ....
-         if(current.timerId){
-            clearInterval(current.timerId);
-            current.alreadyWarned = false;
-            current.round.end = new Date().getTime();
-         }
-         this.updateDisplay(0);
-         var self =this;
-         if(this.rounds[rn]){
-            var __tick = function(){
-               if(!self.running){
-                  return;
-               }
-               var currentTime = new Date().getTime();
-               var elapsedTime = currentTime - self.rounds[rn].start;
-               var dtm = self.rounds[rn].total - elapsedTime;
-               if(dtm > 0){
-                  self.updateDisplay(dtm);
-                  if(dtm <= 5000 &&
-                        self.rounds[rn].total >= 5000 &&
-                           !current.alreadyWarned){
-                     self.sounds.play('warning');
-                     current.alreadyWarned = true;
-                  }
-               }else{
-                  self.updateDisplay(0);
-                  if(current.timerId){
-                     clearInterval(current.timerId);
-                     current.alreadyWarned = false;
-                     current.round.end = new Date().getTime();
-                  }
-               }
-            }
-            current.round = this.rounds[rn];
-            current.round.start = new Date().getTime();
-            current.timerId = setInterval(__tick, this.resolution);
-            var roundNumber = Math.floor(rn/2) + 1;
-            this.notifyForRound(roundNumber, current.round.type);
-            if(current.round.type == 'rest'){
-               this.notify('Break!');
-			   breakCircle();
-               if(rn != 0){
-                  this.sounds.play('end-round');
-               }
-            }else{
-               this.notify('Sketch!');
-               this.sounds.play('start');
-			   sketchCircle();
-            }
-         }else{
-            this.notify('Bravo!');
-            this.sounds.play('end');
-            this.stop();
-         }
-      };
-
-      this.notifyForRound = function(rn, type){
-         $('.round-number').html(rn);
-         $('.round-type').html(type=='rest' ? 'Ready':'Sketch');
-      };
-      var self = this;
-      $('.timer-start').click(function(){
-         if(!self.running){
-            self.start();
-         }else{
-            self.stop();
-            self.notify('Stopped!');
-
-         }
-      });
+	var self = this;
+	$('.timer-start').click(function() {
+		if (!self.running) {
+			self.start();
+		} else {
+			self.stop();
+			self.notify('Stopped!');
+		}
+	});
 
 
 
@@ -589,7 +597,7 @@
 			sounds: {
 				'start':		'/assets/audio/smb_powerup.wav',
 				'end':			'/assets/audio/smb_stage_clear.wav',
-				'end-round':	'/assets/audio/smb_stage_clear.wav',
+				'end-round':	'/assets/audio/smb_coin.wav',
 				'warning':		'/assets/audio/smb_warning.wav'
 			}
 		});
