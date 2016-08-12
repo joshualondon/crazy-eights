@@ -64,6 +64,12 @@ gulp.task('copy', function() {
 	.pipe(notify({ message: '✓ Copy complete' }));
 });
 
+gulp.task('copyAudio', function() {
+	return gulp.src(['src/assets/audio/*'])
+	.pipe(gulp.dest('dist/assets/audio/'))
+	.pipe(notify({ message: '✓ Copied audio to dist'}));
+});
+
 
 // Watch
 gulp.task('watch', function() {
@@ -83,7 +89,7 @@ gulp.task('watch', function() {
 
 // Clean the dist
 gulp.task('clean', function() {
-	return del(['dist/assets', 'dist/*.html'])
+	return del(['dist/assets/css', 'dist/assets/js', 'dist/*.html']);
 });
 
 
@@ -93,10 +99,7 @@ gulp.task('serve', function() {
 		startPath: '',
 		server: {
 			baseDir: 'dist',
-			index: 'index.html',
-			// routes: {
-			// 	'/src' : '/dist'
-			// }
+			index: 'index.html'
 		}
 	});
 
@@ -105,7 +108,7 @@ gulp.task('serve', function() {
 
 
 gulp.task('default', ['clean'], function() {
-	gulp.start('css', 'js', 'copy', 'watch', 'serve');
+	gulp.start('css', 'js', 'copy', 'copyAudio', 'watch', 'serve');
 });
 
 
